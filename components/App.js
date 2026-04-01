@@ -47,13 +47,13 @@ const ALL_PROTOKOLY = [
 const DODATKOWE = [
   { id: 'strona_tytulowa', label: 'Strona tytułowa' },
   { id: 'spis_tresci', label: 'Spis treści (automatyczny)' },
-  { id: 'okladka_waski', label: 'Okładka segregatora — brzeg wąski' },
-  { id: 'okladka_szeroki', label: 'Okładka segregatora — brzeg szeroki' },
+  { id: 'okladka_waski', label: 'Okładka segregatora - brzeg wąski' },
+  { id: 'okladka_szeroki', label: 'Okładka segregatora - brzeg szeroki' },
 ];
 
 const MOCK_RESULT = {
   dane: [
-    { key: 'nazwaInwestycji', label: 'Nazwa inwestycji', value: 'Wykonanie zabezpieczenia ogniochronnego przejść konstrukcji stalowej do klasy odporności ogniowej EI60 w budynku centrum logistycznego CTP ZAB3 — PSIBUFET w Zabrzu' },
+    { key: 'nazwaInwestycji', label: 'Nazwa inwestycji', value: 'Wykonanie zabezpieczenia ogniochronnego przejść konstrukcji stalowej do klasy odporności ogniowej EI60 w budynku centrum logistycznego CTP ZAB3 - PSIBUFET w Zabrzu' },
     { key: 'adres', label: 'Adres obiektu', value: 'ul. Salomona Isaaca 5, 41-807 Zabrze' },
     { key: 'inwestor', label: 'Inwestor', value: 'CTP Invest Poland sp. z o.o., ul. Rondo ONZ 1, 00-124 Warszawa' },
     { key: 'generalnyWykonawca', label: 'Generalny wykonawca', value: 'YPERO S.A., ul. Kozierowskiego 2 lokal 203, 60-185 Skórzewo' },
@@ -62,8 +62,8 @@ const MOCK_RESULT = {
     { key: 'dataEnd', label: 'Data zakończenia', value: '07.11.2025' },
   ],
   systemy: [
-    { key: 's1', label: 'System / materiał', value: 'Flame Cabel Pasta A — Carboline Polska Sp. z o.o.' },
-    { key: 's2', label: 'System / materiał', value: 'Frontrock Plus — Rockwool Polska Sp. z o.o.' },
+    { key: 's1', label: 'System / materiał', value: 'Flame Cabel Pasta A - Carboline Polska Sp. z o.o.' },
+    { key: 's2', label: 'System / materiał', value: 'Frontrock Plus - Rockwool Polska Sp. z o.o.' },
   ],
   certyfikaty: [
     { key: 'c1', label: 'Certyfikat', value: 'Certyfikat Stałości Właściwości Użytkowych 1488-CPR-0538/W' },
@@ -84,20 +84,25 @@ function Logo({ h = 32 }) {
       <path d="M15 14L15 8Q15 5 18 5L22 5" stroke="#999" strokeWidth="2.5" fill="none" strokeLinecap="round"/>
       <circle cx="15" cy="8" r="2.2" fill="#e53030"/><circle cx="15" cy="8" r="1" fill="#fff" opacity=".4"/>
       <ellipse cx="15" cy="53" rx="15" ry="3" fill="#e53030" opacity=".5"/>
-      <text x="38" y="44" fontFamily="Arial Black,Arial,sans-serif" fontWeight="900" fontSize="40" fill="#e53030" letterSpacing="1">AZICO</text>
-      <text x="210" y="44" fontFamily="Arial Black,Arial,sans-serif" fontWeight="900" fontSize="40" fill="#e53030">.PL</text>
+      
+      <text x="38" y="44" fontFamily="Arial Black,Arial,sans-serif" fontWeight="900" fontSize="40" fill="#e53030" letterSpacing="1">AZICO.PL</text>
     </svg>
   );
 }
 
 // === SECTION CARD ===
-function Section({ icon, title, count, total, children }) {
+function Section({ icon, title, count, total, onConfirmAll, children }) {
   return (
     <div style={{ border: '1px solid rgba(255,255,255,.12)', borderRadius: 12, marginBottom: 16, overflow: 'hidden' }}>
       <div style={{ padding: '10px 16px', background: 'rgba(255,255,255,.02)', borderBottom: '1px solid rgba(255,255,255,.06)', display: 'flex', alignItems: 'center', gap: 8 }}>
         <span style={{ fontSize: 16 }}>{icon}</span>
         <span style={{ fontSize: 11, fontWeight: 600, letterSpacing: '.1em', color: '#e53030', textTransform: 'uppercase', flex: 1 }}>{title}</span>
-        {total > 0 && <span style={{ fontSize: 12, color: count === total ? '#22c55e' : '#9ca3af', fontWeight: 500 }}>{count}/{total} zatwierdzone</span>}
+        {total > 0 && <span style={{ fontSize: 12, color: count === total ? '#22c55e' : '#9ca3af', fontWeight: 500 }}>{count}/{total}</span>}
+        {onConfirmAll && total > 0 && (
+          <button onClick={onConfirmAll} style={{ padding: '4px 10px', borderRadius: 6, border: '1px solid '+(count===total?'rgba(229,48,48,.25)':'rgba(34,197,94,.25)'), background: count===total?'rgba(229,48,48,.08)':'rgba(34,197,94,.08)', color: count===total?'#e53030':'#22c55e', fontSize: 11, cursor: 'pointer', fontWeight: 500 }}>
+            {count===total?'Odznacz':'Zatwierdz wszystko'}
+          </button>
+        )}
       </div>
       <div style={{ padding: '8px 12px' }}>{children}</div>
     </div>
@@ -156,7 +161,7 @@ export default function App({ onLogout }) {
   const [done, setDone] = useState(false);
   const [chatOpen, setChatOpen] = useState(true);
   const [chat, setChat] = useState([
-    { role: 'ai', text: 'Witaj! Wgraj dokumenty lub podłącz folder z Google Drive.\n\nWyciągnę z nich wszystkie dane automatycznie — Ty tylko sprawdzisz i potwierdzisz.', time: gt() }
+    { role: 'ai', text: 'Witaj! Wgraj dokumenty lub podłącz folder z Google Drive.\n\nWyciągnę z nich wszystkie dane automatycznie - Ty tylko sprawdzisz i potwierdzisz.', time: gt() }
   ]);
   const [chatIn, setChatIn] = useState('');
   const chatEndRef = useRef(null);
@@ -218,7 +223,7 @@ export default function App({ onLogout }) {
         if (!dZ.length) dZ.push('przejscia_konstrukcji');
 
         const dC = [...MOCK_RESULT.certyfikaty];
-        if (allNames.includes('promat')) { dC.push({ key: 'cx1', label: 'Deklaracja', value: 'Deklaracja Właściwości Użytkowych — PROMATECT-L500' }); dC.push({ key: 'cx2', label: 'KOT', value: 'Krajowa Ocena Techniczna ITB-KOT-2021/1924' }); }
+        if (allNames.includes('promat')) { dC.push({ key: 'cx1', label: 'Deklaracja', value: 'Deklaracja Właściwości Użytkowych - PROMATECT-L500' }); dC.push({ key: 'cx2', label: 'KOT', value: 'Krajowa Ocena Techniczna ITB-KOT-2021/1924' }); }
         if (allNames.includes('askon') || allNames.includes('klap')) { dC.push({ key: 'cx3', label: 'Certyfikat', value: 'Certyfikat Stałości Właściwości Użytkowych 1488-CPR-0309/W (Askon Fire)' }); }
 
         setDane(MOCK_RESULT.dane.map(x => ({ ...x, confirmed: false, source: 'AI' })));
@@ -243,10 +248,8 @@ export default function App({ onLogout }) {
   // Confirm helpers
   const confirmF = (arr, set, i) => set(p => { const n=[...p]; n[i]={...n[i], confirmed:!n[i].confirmed}; return n; });
   const editF = (arr, set, i, v) => set(p => { const n=[...p]; n[i]={...n[i], value:v, confirmed:true}; return n; });
-  const confirmAllData = () => {
-    const all = dane.every(x=>x.confirmed) && systemy.every(x=>x.confirmed) && certy.every(x=>x.confirmed);
-    setDane(p=>p.map(x=>({...x,confirmed:!all}))); setSystemy(p=>p.map(x=>({...x,confirmed:!all}))); setCerty(p=>p.map(x=>({...x,confirmed:!all})));
-  };
+  const toggleAllSection = (arr, set) => { const all = arr.every(x=>x.confirmed); set(p=>p.map(x=>({...x, confirmed:!all}))); };
+  const confirmAllData = () => { toggleAllSection(dane,setDane); toggleAllSection(systemy,setSystemy); toggleAllSection(certy,setCerty); };
   const allOk = dane.length>0 && dane.every(x=>x.confirmed) && systemy.every(x=>x.confirmed) && certy.every(x=>x.confirmed);
 
   // TOC
@@ -254,11 +257,11 @@ export default function App({ onLogout }) {
     const secs = [];
     const s1 = { title: 'I. Oświadczenia, uprawnienia, protokoły', items: [] };
     protokoly.forEach(pid => { const p = ALL_PROTOKOLY.find(x=>x.id===pid); if(p) s1.items.push(p.label); });
-    s1.items.push('Uprawnienia budowlane — ' + kierownik);
+    s1.items.push('Uprawnienia budowlane - ' + kierownik);
     s1.items.push('Zaświadczenie o przynależności do Izby Inżynierów Budownictwa');
     secs.push(s1);
     branze.forEach((b,i) => {
-      const sec = { title: ['II','III','IV','V'][i]+'. Karty materiałowe — branża '+b, items: [] };
+      const sec = { title: ['II','III','IV','V'][i]+'. Karty materiałowe - branża '+b, items: [] };
       certy.forEach(c => sec.items.push(c.value));
       systemy.forEach(s => sec.items.push('Karta produktowa: '+s.value));
       secs.push(sec);
@@ -285,7 +288,7 @@ export default function App({ onLogout }) {
         });
         if (!acted && l.includes('branz') && l.includes('elektr')) { setBranze(p=>p.includes('elektryczna')?p:[...p,'elektryczna']); r='Dodałem branżę elektryczną.'; acted=true; }
         if (!acted && l.includes('branz') && l.includes('sanitar')) { setBranze(p=>p.includes('sanitarna')?p:[...p,'sanitarna']); r='Dodałem branżę sanitarną.'; acted=true; }
-        if (!acted) { r = 'Napisz np.:\n— „dodaj protokół oddymiania"\n— „dodaj pomiary izolacji"\n— „dodaj branżę elektryczną"'; acted=true; }
+        if (!acted) { r = 'Napisz np.:\n- „dodaj protokół oddymiania"\n- „dodaj pomiary izolacji"\n- „dodaj branżę elektryczną"'; acted=true; }
       }
       if (l.includes('usuń') || l.includes('usun') || l.includes('wyrzuć') || l.includes('wyrzuc') || l.includes('zabierz')) {
         ALL_PROTOKOLY.forEach(p => {
@@ -296,7 +299,7 @@ export default function App({ onLogout }) {
       }
       if (!acted) {
         if (l.includes('hilti') || l.includes('promat') || l.includes('zamień') || l.includes('zamien')) r='Podmienię system i atesty we wszystkich protokołach.';
-        else if (l.includes('pomoc') || l.includes('jak') || l.includes('co mogę') || l.includes('co moge')) r='Mogę edytować dokumentację. Napisz:\n— „dodaj protokół oddymiania"\n— „usuń pomiary PE"\n— „dodaj branżę elektryczną"';
+        else if (l.includes('pomoc') || l.includes('jak') || l.includes('co mogę') || l.includes('co moge')) r='Mogę edytować dokumentację. Napisz:\n- „dodaj protokół oddymiania"\n- „usuń pomiary PE"\n- „dodaj branżę elektryczną"';
       }
       addAi(r);
     }, 400);
@@ -313,7 +316,7 @@ export default function App({ onLogout }) {
     }, GEN.length*700+500);
   };
 
-  const canNext = () => { if(step===0) return dane.length>0; if(step===1) return allOk; if(step===2) return protokoly.length>0; return true; };
+  const canNext = () => { if(step===0) return dane.length>0; if(step===1) return dane.length>0; if(step===2) return protokoly.length>0; return true; };
 
   const STEPS = [
     { label: 'Wgrywanie', num: 1 },
@@ -387,7 +390,7 @@ export default function App({ onLogout }) {
                     </div>
                     <div style={{ flex: 1 }}>
                       <div style={{ fontSize: 16, fontWeight: 600 }}>Podłącz folder z Google Drive</div>
-                      <div style={{ fontSize: 13, color: '#9ca3af', marginTop: 2 }}>Wskaż folder budowy — AI sam przejrzy pliki</div>
+                      <div style={{ fontSize: 13, color: '#9ca3af', marginTop: 2 }}>Wskaż folder budowy - AI sam przejrzy pliki</div>
                     </div>
                     <div style={{ fontSize: 13, color: 'rgba(59,130,246,.8)', fontWeight: 500, padding: '6px 14px', background: 'rgba(59,130,246,.08)', borderRadius: 8 }}>Wybierz folder</div>
                   </div>
@@ -425,7 +428,7 @@ export default function App({ onLogout }) {
 
                 {files.length>0 && !analyzing && !dane.length && (
                   <button onClick={onAnalyze} style={{ width: '100%', marginTop: 14, padding: 16, background: 'linear-gradient(135deg,#e53030,#b91c1c)', border: 'none', borderRadius: 12, color: 'white', fontSize: 15, fontWeight: 600, cursor: 'pointer', boxShadow: '0 4px 20px rgba(229,48,48,.25)' }}>
-                    🔍 Analizuj pliki — AI wyciągnie dane
+                    🔍 Analizuj pliki - AI wyciągnie dane
                   </button>
                 )}
                 {analyzing && (
@@ -452,15 +455,15 @@ export default function App({ onLogout }) {
               <div className="fi">
                 <h2 style={{ fontSize: 18, fontWeight: 600, marginBottom: 16 }}>Sprawdź wyciągnięte dane</h2>
 
-                <Section icon="🏗️" title="Dane budowy" count={dane.filter(x=>x.confirmed).length} total={dane.length}>
+                <Section icon="🏗️" title="Dane budowy" count={dane.filter(x=>x.confirmed).length} total={dane.length} onConfirmAll={()=>toggleAllSection(dane,setDane)}>
                   {dane.map((f,i) => <DataRow key={i} field={f} onConfirm={()=>confirmF(dane,setDane,i)} onEdit={v=>editF(dane,setDane,i,v)} />)}
                 </Section>
 
-                <Section icon="⚙️" title="Systemy i materiały" count={systemy.filter(x=>x.confirmed).length} total={systemy.length}>
+                <Section icon="⚙️" title="Systemy i materialy" count={systemy.filter(x=>x.confirmed).length} total={systemy.length} onConfirmAll={()=>toggleAllSection(systemy,setSystemy)}>
                   {systemy.map((f,i) => <DataRow key={i} field={f} onConfirm={()=>confirmF(systemy,setSystemy,i)} onEdit={v=>editF(systemy,setSystemy,i,v)} />)}
                 </Section>
 
-                <Section icon="📜" title="Certyfikaty i atesty" count={certy.filter(x=>x.confirmed).length} total={certy.length}>
+                <Section icon="📜" title="Certyfikaty i atesty" count={certy.filter(x=>x.confirmed).length} total={certy.length} onConfirmAll={()=>toggleAllSection(certy,setCerty)}>
                   {certy.map((f,i) => <DataRow key={i} field={f} onConfirm={()=>confirmF(certy,setCerty,i)} onEdit={v=>editF(certy,setCerty,i,v)} />)}
                 </Section>
 
